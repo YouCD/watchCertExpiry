@@ -24,10 +24,21 @@ website_ssl_earliest_cert_expiry{website="https://github.com"} 1.652184e+09
 # docker 
 
 ```shell
+git clone https://github.com/YouCD/watchCertExpiry.git
+
+cd watchCertExpiry
+
 go build -o bin/watchCertExpiry .
 
 docker build . -t watch_cert_expiry
 
 docker run -d --name watch_cert_expiry -e CERT_MONITOR_URL_LIST=github.com,www.baidu.com -p 8080:8080 watch_cert_expiry
+
+curl  http://127.0.0.1:8080/metrics
+....
+# TYPE website_ssl_earliest_cert_expiry gauge
+website_ssl_earliest_cert_expiry{website="https://www.youcd.online"} 1.61648123e+09
+...
+
 ```
 
