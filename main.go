@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/tls"
 	"errors"
 	"github.com/YouCD/watchCertExpiry/metrics"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -27,27 +26,7 @@ func GetUrlFromEnv() (urls []string,err error) {
 	}
 }
 
-func GetExpiryTimestamp(url string) (timestamp int64) {
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
-	client := &http.Client{Transport: tr}
-	response, err := client.Get(url)
-	if err != nil {
-		log.Println(err)
-		return 0
-	}
-	if response.TLS != nil && len(response.TLS.PeerCertificates) != 0 {
-		value := response.TLS.PeerCertificates[0].NotAfter
-		timestamp = value.Unix()
 
-		return timestamp
-	} else {
-		log.Println("Site does not use HTTPS certificates.")
-		return 0
-	}
-
-}
 
 func main() {
 	urls ,err:= GetUrlFromEnv()
@@ -55,9 +34,8 @@ func main() {
 		log.Panic(err)
 	}
 	for _,url:=range urls{
-		timestamp:=GetExpiryTimestamp(url)
 		log.Printf("monitor site %s",url)
-		go metrics.Observer(url, timestamp)
+		go metrics.Observer(url)
 	}
 	http.Handle("/metrics", promhttp.Handler())
 	log.Fatal(http.ListenAndServe(":8080", nil))
