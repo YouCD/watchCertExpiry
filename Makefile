@@ -7,8 +7,8 @@ BINARY_DIR=bin
 BINARY_NAME:=watchCertExpiry
 
 #mac
-build:
-	CGO_ENABLED=0 $(GOBUILD) -o $(BINARY_DIR)/$(BINARY_NAME)-mac
+build-darwin:
+	CGO_ENABLED=0 GOOS=darwin $(GOBUILD) -o $(BINARY_DIR)/$(BINARY_NAME)-darwin
 # windows
 build-win:
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GOBUILD) -o $(BINARY_DIR)/$(BINARY_NAME)-win.exe
