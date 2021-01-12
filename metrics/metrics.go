@@ -27,11 +27,11 @@ func GetExpiryTimestamp(url string) (timestamp int64) {
 	}
 	client := &http.Client{Transport: tr}
 	response, err := client.Get(url)
-	defer response.Body.Close()
 	if err != nil {
 		log.Println(err)
 		return 0
 	}
+	defer response.Body.Close()
 	if response.TLS != nil && len(response.TLS.PeerCertificates) != 0 {
 		value := response.TLS.PeerCertificates[0].NotAfter
 		timestamp = value.Unix()
