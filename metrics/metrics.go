@@ -1,7 +1,6 @@
 package metrics
 
 import (
-	"crypto/tls"
 	"github.com/prometheus/client_golang/prometheus"
 	"log"
 	"net/http"
@@ -22,10 +21,10 @@ func init() {
 	prometheus.MustRegister(goroutinesGauge)
 }
 func GetExpiryTimestamp(url string) (timestamp int64) {
-	var tr = &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
-	client := &http.Client{Transport: tr}
+	//var tr = &http.Transport{
+	//	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	//}
+	client := &http.Client{}
 	response, err := client.Get(url)
 	if err != nil {
 		log.Println(err)

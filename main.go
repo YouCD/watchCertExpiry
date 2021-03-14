@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/YouCD/watchCertExpiry/metrics"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
@@ -31,7 +32,8 @@ func GetUrlFromEnv() (urls []string,err error) {
 func main() {
 	urls ,err:= GetUrlFromEnv()
 	if err !=nil{
-		log.Panic(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 	for _,url:=range urls{
 		log.Printf("monitor site %s",url)
